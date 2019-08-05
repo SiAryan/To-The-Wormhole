@@ -1,0 +1,6 @@
+Game/
+*.zip
+objects.py
+.idea/
+__pycache__/
+belt1/
