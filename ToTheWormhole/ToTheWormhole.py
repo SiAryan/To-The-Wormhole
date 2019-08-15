@@ -57,10 +57,9 @@ class Asteroids(pygame.sprite.Sprite):
         self.velocity = random.randrange(3, 7)
         self.asteroids.append([self.rect.x, self.rect.y, self.velocity])
 
-
-
 class score(object):
     def __init__(self):
+        self.counter = 0
         self.playerScore = 0
         self.showOver = True
         self.livesImage = pygame.image.load(imagePath + 'ship1.png').convert_alpha()
@@ -86,16 +85,20 @@ class score(object):
         self.scoreText.draw(game.screen)
         pygame.display.flip()
         while self.showOver:
-            for event in pygame.event.get():
-                if event.type == KEYDOWN:
-                    self.showOver = False
-                    return True
-                elif event.type == pygame.QUIT:
-                    game.run1 = False
-                    self.showOver = False
-                    return False
+            print(self.counter)
+            self.counter+=1
+            if self.counter >= 200000:
+                for event in pygame.event.get():
+                    if event.type == KEYDOWN:
+                        self.counter = 0
+                        self.showOver = False
+                        return True
 
-
+                    elif event.type == pygame.QUIT:
+                        self.counter = 0
+                        game.run1 = False
+                        self.showOver = False
+                        return False
 
 class player(pygame.sprite.Sprite):
     def __init__(self):
@@ -164,8 +167,6 @@ class player(pygame.sprite.Sprite):
     def kill(self, Game, score):
         Game.run2 = score.gameOver(Game)
         Game.run1 = False
-
-
 
 class particle(pygame.sprite.Sprite):
     def __init__(self):
@@ -386,9 +387,6 @@ class explode(pygame.sprite.Sprite):
 
         self.showExplosion(screen, self.rect)
 
-
-
-
 class Text(object):
     def __init__(self, textFont, size, message, color, xpos, ypos):
         self.font = font.Font(textFont, size)
@@ -397,9 +395,6 @@ class Text(object):
 
     def draw(self, surface):
         surface.blit(self.surface, self.rect)
-
-
-
 
 class ToTheWormhole(object):
     def __init__(self):
