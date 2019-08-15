@@ -62,6 +62,7 @@ class Asteroids(pygame.sprite.Sprite):
 class score(object):
     def __init__(self):
         self.playerScore = 0
+        self.showOver = True
         self.livesImage = pygame.image.load(imagePath + 'ship1.png').convert_alpha()
         self.livesImage = pygame.transform.scale(self.livesImage, (30,30))
         self.livesRect = self.livesImage.get_rect(topleft=(50, 5))
@@ -79,15 +80,20 @@ class score(object):
         for i in range(self.playerLives):
             screen.blit(self.livesImage, self.livesRect)
             self.livesRect.x += 31
-            
-    def gameOver(self, screen):
+    def gameOver(self, game):
         self.scoreText = Text(FONT, 50, 'Score: ' + str(self.playerScore), WHITE, 380, 200)
-        screen.blit(game.background, bgOrigin)
-        self.scoreText.draw(screen)
+        game.screen.blit(game.background, bgOrigin)
+        self.scoreText.draw(game.screen)
         pygame.display.flip()
-        pygame.time.delay(2000)
-
-
+        while self.showOver:
+            for event in pygame.event.get():
+                if event.type == KEYDOWN:
+                    self.showOver = False
+                    return True
+                elif event.type == pygame.QUIT:
+                    game.run1 = False
+                    self.showOver = False
+                    return False
 
 
 
@@ -101,6 +107,7 @@ class player(pygame.sprite.Sprite):
         self.speed = 5
         self.flash = False
         self.counter = 0
+        self.counter2 = 0
 
     def move(self, keys):
         if self.rect.x <= screenSize[0]-self.rect.width-5:
@@ -155,10 +162,8 @@ class player(pygame.sprite.Sprite):
                 self.flash = False
 
     def kill(self, Game, score):
-        score.gameOver(Game.screen)
+        Game.run2 = score.gameOver(Game)
         Game.run1 = False
-        Game.run2 = True
-
 
 
 
@@ -383,6 +388,7 @@ class explode(pygame.sprite.Sprite):
 
 
 
+
 class Text(object):
     def __init__(self, textFont, size, message, color, xpos, ypos):
         self.font = font.Font(textFont, size)
@@ -410,9 +416,23 @@ class ToTheWormhole(object):
         self.framerate = self.clock.get_fps()
         self.run1 = True
         self.run2 = True
+        self.gameOver = False
         self.frameText = Text(FONT, 25, str(self.time), WHITE, 20, 200)
+        ship = player()
+        Score = score()
+        asteroids = Asteroids()
+        asteroids.generate()
+        dust = particle()
+        enemy = enemies()
+        enemy.randomGen()
+        bullet = Bullets(ship)
+        dust.generate()
+        hit = explode()
+        refreshes = 0
+        refresh = 1000
 
     def startScreen(self):
+
         self.run2 = True
         particles = particle()
         particles.generate()
