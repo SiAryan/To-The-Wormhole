@@ -1,6 +1,12 @@
+# references and resources used
+# https://github.com/leerob/Space_Invaders - helpful open source space invaders game, that inspired me quite a bit
+# https://techwithtim.net/ - helpful pygame tutorial
+
+
 import math, random, pygame
 from os.path import abspath, dirname
 from pygame import *
+# Global variables for ease of use later
 basePath = abspath(dirname(__file__))
 imagePath = basePath + '/images/ToTheWormhole/'
 soundsPath = basePath + '/sounds/ToTheWormhole/'
@@ -20,6 +26,9 @@ screen = pygame.display.set_mode(screenSize)
 bgOrigin = (-460, 0)
 FPS = 60
 
+# asteroid sprites are generated on the top right and
+# move towards the bottom left. They can destroy the
+# player sprtie
 class Asteroids(pygame.sprite.Sprite):
     def __init__(self):
         self.image = pygame.image.load(imagePath + 'asteroid.png').convert_alpha()
@@ -28,28 +37,34 @@ class Asteroids(pygame.sprite.Sprite):
         self.num = 4
         self.asteroids = []
         self.asteroids_x = []
+    # Generate the initial sprites, on the top left. (Not on screen)
     def generate(self):
         for i in range(self.num):
             self.rect.x = random.randrange(700, 1100)
             self.rect.y = random.randrange(-300, 100)
             self.velocity = random.randrange(3,7)
+            # All three attributes of the asteroids are randomly selected from a range)
+            # Decided to use a simple array, but there are probably better data
+            # structure that could be used
             self.asteroids.append([self.rect.x, self.rect.y, self.velocity])
-
+    # fall towards the bottom left
     def fall(self, screen):
         for i in self.asteroids:
+            # though I don't use the list of the x coordinates of the asteroids at the moment,
+            # since I did the same with the Enemies array, I decided to make a x coordinate array
             self.asteroids_x.append(i[0])
         for i in self.asteroids:
             i[0] -= i[2]
             i[1] += i[2]
             screen.blit(self.image, (i[0], i[1]))
-
+            # when the asteroids go off screen, they are regenerated at the top right
             if i[0] <= 0 or i[1] >= 600:
                 self.asteroids.remove(i)
-                self.rect.x = random.randrange(700, 1100)
-                self.rect.y = random.randrange(-300, 100)
+                self.rect.x = random.randrange(1000, 1200)
+                self.rect.y = random.randrange(-450, 250)
                 self.velocity = random.randrange(3, 7)
                 self.asteroids.append([self.rect.x, self.rect.y, self.velocity])
-
+    # when hit with player fire, they can be destroyed. but they don't increase the score
     def destroy(self, i):
         self.asteroids.remove(i)
         self.rect.x = random.randrange(700, 1100)
@@ -59,6 +74,7 @@ class Asteroids(pygame.sprite.Sprite):
 
 class score(object):
     def __init__(self):
+        # player score and player lives are of this class
         self.counter = 0
         self.playerScore = 0
         self.showOver = True
@@ -68,22 +84,28 @@ class score(object):
         self.playerLives = 3
         self.scoreText = Text(FONT, 25, 'Score: ' + str(self.playerScore), WHITE, 820, 10)
         self.livesText = Text(FONT, 25, 'Lives: ', WHITE, 5, 10)
+
+    # top right will show the player score
     def displayScore(self, screen):
         self.scoreText = Text(FONT, 25, 'Score: ' + str(self.playerScore), WHITE, 820, 10)
         self.scoreText.draw(screen)
         #pygame.display.update()
-
+    # top left shows the three player lives as smaller ships sprites
     def displayLives(self, screen):
         self.livesText.draw(screen)
         self.livesRect = self.livesImage.get_rect(topleft=(100, 5))
         for i in range(self.playerLives):
             screen.blit(self.livesImage, self.livesRect)
             self.livesRect.x += 31
+    # This function probably doesn't belong here
     def gameOver(self, game):
+        # when the player loses all three lives, the final score is displayed till another key is pressed or the user
+        # quits
         self.scoreText = Text(FONT, 50, 'Score: ' + str(self.playerScore), WHITE, 380, 200)
         game.screen.blit(game.background, bgOrigin)
         self.scoreText.draw(game.screen)
         pygame.display.flip()
+        # while loop to display the score till another input is made
         while self.showOver:
             print(self.counter)
             self.counter+=1
@@ -102,6 +124,7 @@ class score(object):
 
 class player(pygame.sprite.Sprite):
     def __init__(self):
+        # player sprites, that I edited myself :)
         self.image1 = pygame.image.load(imagePath + 'ship1.png').convert_alpha()
         self.image2 = pygame.image.load(imagePath + 'ship2.png').convert_alpha()
         self.Bimage1 = pygame.image.load(imagePath + 'Bship1.png').convert_alpha()
@@ -111,28 +134,26 @@ class player(pygame.sprite.Sprite):
         self.flash = False
         self.counter = 0
         self.counter2 = 0
-
+    # parameters to keep the player within screen bounds
     def move(self, keys):
         if self.rect.x <= screenSize[0]-self.rect.width-5:
             if keys[pygame.K_RIGHT]:
                 self.rect.x += self.speed
-
         if self.rect.x >= 5:
             if keys[pygame.K_LEFT]:
                 self.rect.x -= self.speed
-
         if self.rect.y >= 150:
             if keys[pygame.K_UP]:
                 self.rect.y -= self.speed
-
         if self.rect.y <= 540:
             if keys[pygame.K_DOWN]:
                 self.rect.y += self.speed
 
         position = [self.rect.x + self.rect.width/2 - 2, self.rect.y - 15]
         return position
-
-    def draw(self, screen ,cond, keys):
+    # following function adds a bit of animation to the player sprite, and uses sprites with stronger
+    # thrusters if the player decides to move up the screen
+    def draw(self, screen, cond, keys):
         if not self.flash:
             self.counter = 0
             if (keys[pygame.K_UP]):
@@ -140,12 +161,14 @@ class player(pygame.sprite.Sprite):
                     screen.blit(self.Bimage1, self.rect)
                 if not cond:
                     screen.blit(self.Bimage2, self.rect)
-
+            # if up key is pressed, use the images with boosted thrusters
             if not (keys[pygame.K_UP]):
                 if cond:
                     screen.blit(self.image1, self.rect)
                 if not cond:
                     screen.blit(self.image2, self.rect)
+
+        # this conditional causes the player sprite to flash, if the player gets hit
         if self.flash:
             self.counter +=1
             if self.counter > 15 and self.counter <= 30 or self.counter > 45 and self.counter <=60 :
@@ -164,11 +187,13 @@ class player(pygame.sprite.Sprite):
             if self.counter > 60:
                 self.flash = False
 
+    # Once all three lives of the player are used up
     def kill(self, Game, score):
         Game.run2 = score.gameOver(Game)
         Game.run1 = False
 
 class particle(pygame.sprite.Sprite):
+    # This class is meant for the space dust effect.
     def __init__(self):
         self.image1 = pygame.image.load(imagePath + 'particle3.png').convert_alpha()
         self.image2 = pygame.image.load(imagePath + 'particle1.png').convert_alpha()
@@ -179,7 +204,7 @@ class particle(pygame.sprite.Sprite):
         self.particles1 = []
         self.particles2 = []
         self.particles3 = []
-
+    # The particels are generated above the visible screen
     def generate(self):
         for i in range(self.num):
             self.x = random.randrange(0, screenSize[0])
@@ -195,7 +220,9 @@ class particle(pygame.sprite.Sprite):
             self.x = random.randrange(0, screenSize[0])
             self.y = random.randrange(0, screenSize[1])
             self.particles3.append([self.x, self.y])
-
+    # All particles fall at constant velocity, towards the bottom of the screen
+    # once they go off screen, their heights are randomly selected from a range
+    # over the screen
     def fall(self, screen):
         for i in self.particles1:
             i[1] += self.speed
@@ -219,6 +246,7 @@ class particle(pygame.sprite.Sprite):
                 i[1] = random.randrange(-50, -5)
 
 class Bullets(pygame.sprite.Sprite):
+    # projectile attributes
     def __init__(self, player):
         self.image1 = pygame.image.load(imagePath + 'laser.png').convert_alpha()
         self.image2 = pygame.image.load(imagePath + 'enemylaser.png').convert_alpha()
@@ -226,7 +254,8 @@ class Bullets(pygame.sprite.Sprite):
         self.velocity = 9
         self.playerRect = self.image1.get_rect(topleft=(player.rect.x +
                                                     player.rect.width / 2 - 2, player.rect.y - 15))
-
+    # this was my first attempt at making a bullet
+    # ended up using arrays because they were more convenient and eassier to use
     def Fire(self, screen, keys, run, position):
         if keys[pygame.K_SPACE] and run == False:
             run = True
@@ -240,13 +269,12 @@ class Bullets(pygame.sprite.Sprite):
                 run = False
 
         return run, self.playerRect
-
+    # The player fire method
     def Quickfire(self, screen, keys, position, refresh, player):
         if keys[pygame.K_SPACE] and refresh > 1 and not player.flash:
 
             self.Beam.append(position)
             refresh = 0
-
 
         for i in self.Beam:
             screen.blit(self.image1, i)
@@ -260,6 +288,7 @@ class Bullets(pygame.sprite.Sprite):
         self.Beam.remove(i)
 
 class enemies(pygame.sprite.Sprite):
+    # Enemy class
     def __init__(self):
         self.velocity = 7
         self.image1 = pygame.image.load(imagePath + 'enemy1_1.png').convert_alpha()
@@ -275,7 +304,8 @@ class enemies(pygame.sprite.Sprite):
         self.images = [self.image1, self.image2, self.image3]
         self.rightEdge = False
         self.generated = False
-
+    # 5 enemies are generated in 5 sections of uniform width but height and positing
+    # within those sections are randomly chosen
     def randomGen(self):
         width = 0
         if len(self.Enemies) != self.oneNum:
@@ -286,7 +316,8 @@ class enemies(pygame.sprite.Sprite):
                     self.Enemies.append([self.x, self.y])
                     self.Enemies_x.append(self.x)
                 width += 200
-
+    # The enemies move towards the bottom
+    # if they go off screen, then their height is reset above the screen
     def randomFall(self, screen):
 
         for j in self.Enemies:
@@ -305,7 +336,8 @@ class enemies(pygame.sprite.Sprite):
         self.randomFall(screen)
 
 
-
+    # removes the enemy from the list of enemies.
+    # replaces it with a new enemy
     def kill(self, i):
         if i in self.Enemies:
             self.Enemies.remove(i)
@@ -316,6 +348,7 @@ class enemies(pygame.sprite.Sprite):
             self.Enemies.append([self.x, self.y])
 
 class explode(pygame.sprite.Sprite):
+    # explosion for the enemies and asteroids
     def __init__(self):
         self.image1 = pygame.image.load(imagePath + 'explosionpurple.png').convert_alpha()
         self.image1 = pygame.transform.scale(self.image1, (50, 50))
@@ -326,7 +359,8 @@ class explode(pygame.sprite.Sprite):
         self.rect = self.image1.get_rect()
         self.refresh = 0
         self.explode = False
-
+    # displays the explosion sprite once, at a smaller size, again at a bigger size, to look more real
+    # counter is used so the images stay on the screen long enough to be seen
     def showExplosion(self, screen, i):
         if self.explode:
             if self.refresh <= 10:
@@ -337,7 +371,7 @@ class explode(pygame.sprite.Sprite):
             if self.refresh > 20:
                 self.explode = False
         self.refresh += 1
-
+    # checks for interaction between, enemies, bullets, asteroids and the player
     def hit(self, enemy, bullets, player, screen, game, score, asteroids):
         for i in asteroids.asteroids:
             for j in bullets.Beam:
@@ -388,6 +422,8 @@ class explode(pygame.sprite.Sprite):
         self.showExplosion(screen, self.rect)
 
 class Text(object):
+    # this class was taken from Roberet Lee's open source space invaders game
+    # makes drawing text over the screen much easier
     def __init__(self, textFont, size, message, color, xpos, ypos):
         self.font = font.Font(textFont, size)
         self.surface = self.font.render(message, True, color)
@@ -397,6 +433,8 @@ class Text(object):
         surface.blit(self.surface, self.rect)
 
 class ToTheWormhole(object):
+    # The game class, contains the start screen and running game methods. Other objects are initialed here
+    # and all the other classes interact with each other within this class methods
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
@@ -448,7 +486,6 @@ class ToTheWormhole(object):
             self.titleText2.draw(self.screen)
 
             pygame.display.flip()
-            print(self.framerate)
 
     def runGame(self):
 
