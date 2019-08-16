@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1592e2b3-d7cc-473f-9bdd-94b016851c20" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ToTheWormhole/ToTheWormhole.py" beforeDir="false" afterPath="$PROJECT_DIR$/ToTheWormhole/ToTheWormhole.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,19 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ToTheWormhole/ToTheWormhole.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="63" column="49" selection-start-line="63" selection-start-column="49" selection-end-line="63" selection-end-column="49" />
-              <folding>
-                <element signature="e#0#27#0" expanded="true" />
-                <element signature="e#2051#3725#0" />
-                <element signature="e#3651#5993#0" />
-                <element signature="e#5640#7339#0" />
-                <element signature="e#10323#11612#0" />
-                <element signature="e#11841#13757#0" />
-                <element signature="e#14148#17161#0" />
-                <element signature="e#17492#17810#0" />
-                <element signature="e#17939#21302#0" />
-              </folding>
+            <state relative-caret-position="221">
+              <caret line="31" column="38" selection-start-line="31" selection-start-column="38" selection-end-line="31" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -65,16 +53,15 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="width" value="977" />
-    <option name="height" value="1088" />
+    <option name="x" value="-9" />
+    <option name="width" value="978" />
+    <option name="height" value="1089" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -91,6 +78,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -217,10 +205,10 @@
     </configuration>
     <list>
       <item itemvalue="Python.Asteroids" />
+      <item itemvalue="Python.ToTheWormhole" />
       <item itemvalue="Python.game (1)" />
       <item itemvalue="Python.rotationTest" />
       <item itemvalue="Python.shipGame" />
-      <item itemvalue="Python.ToTheWormhole" />
     </list>
     <recent_temporary>
       <list>
@@ -247,14 +235,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49933067" visible="true" weight="0.12351387" />
       <window_info id="Structure" order="1" sideWeight="0.50066936" side_tool="true" weight="0.12351387" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.3295905" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32931727" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.15662651" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.15662651" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -303,16 +290,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/original/shipGame.py" />
-    <entry file="file://$PROJECT_DIR$/original/ToTheWormhole.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="84" column="12" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/original/ToTheWormhole.py" />
     <entry file="file://$PROJECT_DIR$/../Space_Invaders-master/Space_Invaders-master/spaceinvaders.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -335,10 +313,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ToTheWormhole/ToTheWormhole.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="63" column="49" selection-start-line="63" selection-start-column="49" selection-end-line="63" selection-end-column="49" />
+        <state relative-caret-position="221">
+          <caret line="31" column="38" selection-start-line="31" selection-start-column="38" selection-end-line="31" selection-end-column="38" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#588#2022#0" />
             <element signature="e#2051#3725#0" />
             <element signature="e#3651#5993#0" />
             <element signature="e#5640#7339#0" />
